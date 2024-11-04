@@ -99,37 +99,48 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String malop = edtmalop.getText().toString();
-                int n = mydatabase.delete("tbllop","malop = ?",new
-                        String[]{malop});
-                String msg ="";
-                if (n == 0)
-                {
-                    msg = "No record to Delete";
+                String tenlop = edttenlop.getText().toString();
+
+                // Xóa nếu `malop` hoặc `tenlop` khớp
+                int rowsDeleted = mydatabase.delete("tbllop",
+                        "malop = ? OR tenlop = ?",
+                        new String[]{malop, tenlop});
+
+                String msg;
+                if (rowsDeleted > 0) {
+                    msg = rowsDeleted + " bản ghi đã được xóa";
+                } else {
+                    msg = "Không tìm thấy bản ghi nào để xóa";
                 }
-                else {
-                    msg = n +" record is deleted";
-                }Toast.makeText(MainActivity.this, msg,
-                        Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                // Tùy chọn: Làm mới lại dữ liệu ở đây nếu cần
             }
         });
         btnupdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String siso = edtsiso.getText().toString();
                 String malop = edtmalop.getText().toString();
+                String tenlop = edttenlop.getText().toString();
+                String siso = edtsiso.getText().toString();
+
                 ContentValues myvalue = new ContentValues();
-                myvalue.put("siso",siso);
-                int n = mydatabase.update("tbllop",myvalue,"malop =?",new String[]{malop});
-                String msg = "";
-                if (n == 0)
-                {
-                    msg = "No record to Update";
+                myvalue.put("siso", siso);
+
+                // Cập nhật nếu `malop` hoặc `tenlop` khớp
+                int rowsUpdated = mydatabase.update("tbllop", myvalue,
+                        "malop = ? OR tenlop = ?",
+                        new String[]{malop, tenlop});
+
+                String msg;
+                if (rowsUpdated > 0) {
+                    msg = rowsUpdated + " bản ghi đã được cập nhật";
+                } else {
+                    msg = "Không tìm thấy bản ghi nào để cập nhật";
                 }
-                else {
-                    msg = n+ " record is updated";
-                }
-                Toast.makeText(MainActivity.this, msg,
-                        Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                // Tùy chọn: Làm mới lại dữ liệu ở đây nếu cần
             }
         });
         btnquery.setOnClickListener(new View.OnClickListener() {
